@@ -33,7 +33,7 @@ dependencies {
 
 // Glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.mcxiaoke.volley:library-aar:1.0.0'
+    //compile 'com.mcxiaoke.volley:library-aar:1.0.0'
 
     testCompile 'junit:junit:4.12'
     compile files('libs/PhotoUtil.jar')
