@@ -159,12 +159,12 @@ public class SearchActivity extends ListActivity {
         }
         else {
             if (What.equals("User")) {
-                JSON_URL = "http://192.168.48.74/test/getUsers.php";
+                JSON_URL = Link.link+"/test/getUsers.php";
 
             } else {
                 //System.out.println(Bookjson);
                 //showJSONBook(Bookjson);
-                JSON_URL = "http://192.168.48.74/test/getUsers.php";
+                JSON_URL = Link.link+"/test/getUsers.php";
                 id = Integer.parseInt(search);
 
             }
