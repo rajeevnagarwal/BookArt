@@ -59,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private BooksAdapter adapter;
     private List<Books> albumList;
+    String user;
 
 
     SearchView searchView = null;
@@ -67,6 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         handleIntent(getIntent());
         setContentView(R.layout.activity_home);
+        user = getIntent().getStringExtra("user_name");
         final String[] from = new String[] {"username","image"};
         final int[] to = new int[] {R.id.text,R.id.image};
         myAdapter = new SimpleCursorAdapter(HomeActivity.this, R.layout.suggestion, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
@@ -85,7 +87,7 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         albumList = new ArrayList<>();
-        adapter = new BooksAdapter(this, albumList);
+        adapter = new BooksAdapter(this, albumList,user);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -120,6 +122,7 @@ public class HomeActivity extends AppCompatActivity {
                 in.putExtra("Search",bid);
                 in.putExtra("What",type);
             }
+            in.putExtra("current_user",user);
             startActivity(in);
         }
     }
