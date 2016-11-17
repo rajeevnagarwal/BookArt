@@ -230,8 +230,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String>
         {
             Intent i= new Intent(context,HomeActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            //i.putExtra("user_name",my_user_name);
+            i.putExtra("user_name",my_user_name);
             context.startActivity(i);
         }
         if(result.equals("Inserted into user_book table database sucessfully"))

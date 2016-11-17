@@ -26,6 +26,7 @@ import java.util.List;
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
     private Context mContext;
     private List<Books> albumList;
+    private String user;
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView title;
@@ -42,9 +43,10 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder
     }
 
 
-    public BooksAdapter(Context mContext, List<Books> albumList) {
+    public BooksAdapter(Context mContext, List<Books> albumList,String user) {
         this.mContext = mContext;
         this.albumList = albumList;
+        this.user = user;
     }
 
     @Override
@@ -78,6 +80,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("Search",album.getId());
                 i.putExtra("What","Book");
+                i.putExtra("current_user",user);
                 mContext.startActivity(i);
             }
 
