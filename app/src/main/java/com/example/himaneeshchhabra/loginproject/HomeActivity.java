@@ -233,8 +233,21 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case R.id.add_book:
+                Intent intent1=new Intent(getApplicationContext(),BookActivity.class);
+                startActivity(intent1);
+                break;
+            case R.id.logout:
+                Intent intent2 = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(intent2);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
         return super.onOptionsItemSelected(item);
     }
     private class AsyncFetch extends AsyncTask<String, String, String> {

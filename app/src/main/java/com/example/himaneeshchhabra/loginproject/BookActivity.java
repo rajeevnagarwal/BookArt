@@ -48,7 +48,7 @@ import static android.R.id.list;
 
 public class BookActivity extends AppCompatActivity {
 
-    Button btn;
+    Button btn,logout1;
     CameraPhoto cameraPhoto;
     GalleryPhoto galleryPhoto;
     ImageView camera,gallery,book_image;
@@ -89,6 +89,11 @@ public class BookActivity extends AppCompatActivity {
         Intent i=new Intent();
         Bundle bundle=getIntent().getExtras();
         bund=bundle;
+    }
+    public void onLogout(View v)
+    {
+        Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(intent);
     }
     public void onAdd(View v)
     {

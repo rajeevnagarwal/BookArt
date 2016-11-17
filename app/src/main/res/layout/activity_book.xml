@@ -107,4 +107,14 @@
             android:id="@+id/insert_book"
             android:onClick="onInsert"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:id="@+id/logout1"
+        android:onClick="onLogout"/>
+    </LinearLayout>
 </LinearLayout>

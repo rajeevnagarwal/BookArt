@@ -30,7 +30,8 @@ public class GPSTracker extends Service implements LocationListener {
     private static final long MIN_TIME_BW_UPDATE = 1000 * 60 * 1;
     protected LocationManager locationManager;
 
-    public GPSTracker(Context context) {
+    public GPSTracker(Context context) //this constructor is used to create a context and get call to the location
+    {
         this.context = context;
         getLocation();
     }
