@@ -6,6 +6,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ServerValue;
 
 
 import java.text.SimpleDateFormat;
@@ -24,13 +25,13 @@ public class MessageDataSource {
     private static final String COLUMN_SENDER = "sender";
 
     public static void saveMessage(Message message, String convoId,String sender){
-        Date date = message.getDate();
-        String key = sDateFormat.format(date);
+
         HashMap<String, String> msg = new HashMap<>();
         msg.put(COLUMN_TEXT, message.getMessage());
         msg.put(COLUMN_SENDER,sender);
-        sRef.child(convoId).child(key).setValue(msg);
-       // sRef.child(convoId).setValue(msg);
+        Firebase r=sRef.child(convoId).push();
+        r.setValue(msg);
+        //sRef.child(convoId).child(key).setValue(msg);
     }
     public static MessagesListener addMessagesListener(String convoId, final MessagesCallbacks callbacks){
         MessagesListener listener = new MessagesListener(callbacks);
@@ -53,7 +54,6 @@ public class MessageDataSource {
             message.setSender(msg.get(COLUMN_SENDER));
             message.setMessage(msg.get(COLUMN_TEXT));
             try {
-                message.setDate(sDateFormat.parse(dataSnapshot.getKey()));
             }catch (Exception e){
                 Log.d(TAG, "Couldn't parse date"+e);
             }

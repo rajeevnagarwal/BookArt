@@ -9,15 +9,8 @@ import java.util.Date;
 public class Message {
     private String message;
     private String sender;
-    private Date date;
 
-    public Date getDate() {
-        return date;
-    }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
 
     public String getSender() {
         return sender;

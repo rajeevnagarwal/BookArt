@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.ServerValue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -61,7 +63,6 @@ public class ChatActivity extends AppCompatActivity  implements View.OnClickList
         String newMessage = newMessageView.getText().toString();
         newMessageView.setText("");
         Message msg = new Message();
-        msg.setDate(new Date());
         msg.setMessage(newMessage);
         msg.setSender(mCurrent);
 
