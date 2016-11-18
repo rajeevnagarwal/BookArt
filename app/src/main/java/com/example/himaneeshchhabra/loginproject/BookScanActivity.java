@@ -124,6 +124,7 @@ public class BookScanActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             pdLoading.dismiss();
+
             System.out.println(result);
         }
     }
