@@ -17,18 +17,18 @@ import java.util.HashMap;
  */
 
 public class MessageDataSource {
-    private static final Firebase sRef = new Firebase("");
-    private static SimpleDateFormat sDateFormat = new SimpleDateFormat("https://chatapp-2b470.firebaseio.com/");
+    private static final Firebase sRef = new Firebase("https://chatapp-2b470.firebaseio.com/");
+    private static SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyyMMddmmss");
     private static final String TAG = "MessageDataSource";
     private static final String COLUMN_TEXT = "text";
     private static final String COLUMN_SENDER = "sender";
 
-    public static void saveMessage(Message message, String convoId){
+    public static void saveMessage(Message message, String convoId,String sender){
         Date date = message.getDate();
         String key = sDateFormat.format(date);
         HashMap<String, String> msg = new HashMap<>();
         msg.put(COLUMN_TEXT, message.getMessage());
-        msg.put(COLUMN_SENDER,"Ajay");
+        msg.put(COLUMN_SENDER,sender);
         sRef.child(convoId).child(key).setValue(msg);
     }
     public static MessagesListener addMessagesListener(String convoId, final MessagesCallbacks callbacks){

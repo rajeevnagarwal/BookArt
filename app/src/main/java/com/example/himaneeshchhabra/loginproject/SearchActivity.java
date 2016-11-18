@@ -8,7 +8,9 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,8 +34,10 @@ public class SearchActivity extends ListActivity {
     public static String[] addr, profession, contact, longitude, latitude, age;
     private ItemAdapter adapter;
     public int size;
+    private String current_user;
 
     private ImageView imageView;
+    private Button msg;
 
     private BookAdapter bookAdapter;
     private int index = -1;
@@ -46,6 +50,7 @@ public class SearchActivity extends ListActivity {
     private String What;
     private String search;
     private Integer id;
+    private String name;
 
 
     @Override
@@ -56,6 +61,10 @@ public class SearchActivity extends ListActivity {
         imageView = (ImageView) findViewById(R.id.img);
         What = intent.getStringExtra("What");
         search = intent.getStringExtra("Search");
+        current_user = intent.getStringExtra("current_user");
+        System.out.println("hello user");
+        System.out.println(current_user);
+        msg = (Button)findViewById(R.id.smsg);
         //pDialog = new ProgressDialog(getApplicationContext());
 
         if (savedInstanceState != null) {
@@ -113,15 +122,30 @@ public class SearchActivity extends ListActivity {
                     }
                 }
                 if (flag) {
+                    System.out.println("kkkkkkkkffffffffff");
                     labels.setText("Username: \nName: \nAge: \nContact: \nProfession: \nGender: \nAddress:");
                     viewDetails.setText(username[j] + "\n" + names[j] + "\n" + age[j] + "\n" + contact[j] + "\n" + profession[j] + "\n" + gender[j] + "\n" + addr[j]);
                     byte[] decodedString = Base64.decode(image[j], Base64.DEFAULT);
                     Bitmap decodeByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     imageView.setImageBitmap(decodeByte);
-                    adapter = new ItemAdapter(SearchActivity.this, R.layout.list_item, listItems);
+                    adapter = new ItemAdapter(SearchActivity.this, R.layout.list_item, listItems,current_user,name);
+                    msg.setVisibility(View.VISIBLE);
+                    name = username[j];
+                    System.out.println("alskjdg;laskjdg;lasjdg;lksjad;gklsdjg;"+name);
+                   /* msg.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            System.out.println("asdhfoowiuefhasldgj");
+                            Intent i = new Intent(SearchActivity.this,ChatActivity.class);
+                            i.putExtra("current_user",current_user);
+                            i.putExtra("receive_user",name);
+                            startActivity(i);
+                        }
+                    });*/
                     setListAdapter(adapter);
                 }
             } else {
+                msg.setVisibility(View.GONE);
                 //System.out.println(Bookjson);
                 //showJSONBook(Bookjson);
                 //JSON_URL = "http://192.168.48.74/test/getUsers.php";
@@ -145,13 +169,15 @@ public class SearchActivity extends ListActivity {
                     }
 
                 }
+               // msg.setVisibility(View.GONE);
                 if (flag) {
                     labels.setText("Name: \nMarket Price: \nNo of times Sold: \nNo of times Borrowed:");
                     viewDetails.setText(bname[j] + "\n" + market_price[j] + "\n" + no_sold[j] + "\n" + no_borrowed[j]);
                     byte[] decodedString = Base64.decode(image[j], Base64.DEFAULT);
                     Bitmap decodeByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     imageView.setImageBitmap(decodeByte);
-                    bookAdapter = new BookAdapter(SearchActivity.this, R.layout.book_item, bookItems);
+
+                    bookAdapter = new BookAdapter(SearchActivity.this, R.layout.book_item, bookItems,current_user,name);
                     setListAdapter(bookAdapter);
                 }
             }
@@ -163,6 +189,7 @@ public class SearchActivity extends ListActivity {
 
             } else {
                 //System.out.println(Bookjson);
+                msg.setVisibility(View.GONE);
                 //showJSONBook(Bookjson);
                 JSON_URL = Link.link+"/test/getUsers.php";
                 id = Integer.parseInt(search);
@@ -175,6 +202,17 @@ public class SearchActivity extends ListActivity {
         viewDetails = (TextView) findViewById(R.id.ViewDetails);
         labels = (TextView) findViewById(R.id.labels);
     }
+    public void onSend(View v)
+    {
+        System.out.println("asdhfoowiuefhasldgj");
+        Intent i = new Intent(SearchActivity.this,ChatActivity.class);
+        System.out.println(current_user);
+        System.out.println(name);
+        i.putExtra("current_user",current_user);
+        i.putExtra("receive_user",name);
+        startActivity(i);
+    }
+
 
 
 
@@ -282,7 +320,8 @@ public class SearchActivity extends ListActivity {
             byte[] decodedString= Base64.decode(pj.image[j],Base64.DEFAULT);
             Bitmap decodeByte= BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
             imageView.setImageBitmap(decodeByte);
-            adapter=new ItemAdapter(SearchActivity.this,R.layout.list_item,listItems);
+            adapter=new ItemAdapter(SearchActivity.this,R.layout.list_item,listItems,current_user,name);
+            name = username[j];
             setListAdapter(adapter);
                /* index = i + 1;
                 What = "ListBook";
@@ -418,7 +457,7 @@ public class SearchActivity extends ListActivity {
             byte[] decodedString= Base64.decode(pj.imagebook[j],Base64.DEFAULT);
             Bitmap decodeByte= BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
             imageView.setImageBitmap(decodeByte);
-            bookAdapter=new BookAdapter(SearchActivity.this,R.layout.book_item,bookItems);
+            bookAdapter=new BookAdapter(SearchActivity.this,R.layout.book_item,bookItems,current_user,name);
             setListAdapter(bookAdapter);
         }
     }

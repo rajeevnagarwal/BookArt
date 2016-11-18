@@ -29,11 +29,15 @@ public class BookAdapter extends ArrayAdapter<User> {
 
     private ArrayList<User> users;
     private Context context;
+    private String current_user;
+    private String receive_user;
 
-    public BookAdapter(Context context, int resource, ArrayList<User> objects) {
+    public BookAdapter(Context context, int resource, ArrayList<User> objects,String user,String ruser) {
         super(context, resource, objects);
         this.users=objects;
         this.context=context;
+        this.current_user = user;
+        this.receive_user = ruser;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
@@ -65,6 +69,8 @@ public class BookAdapter extends ArrayAdapter<User> {
                         Intent intent=new Intent(context,SearchActivity.class);
                         intent.putExtra("Search", b.getUsername());
                         intent.putExtra("What","User");
+                        intent.putExtra("current_user",current_user);
+                        intent.putExtra("receive_user",receive_user);
                         context.startActivity(intent);
                     }
                 });

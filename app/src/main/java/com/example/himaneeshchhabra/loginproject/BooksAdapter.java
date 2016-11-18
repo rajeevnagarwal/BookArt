@@ -80,6 +80,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("Search",album.getId());
                 i.putExtra("What","Book");
+                System.out.println("Hello "+user);
                 i.putExtra("current_user",user);
                 mContext.startActivity(i);
             }

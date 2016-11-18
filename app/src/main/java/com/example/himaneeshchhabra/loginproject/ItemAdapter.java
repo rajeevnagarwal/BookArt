@@ -28,11 +28,15 @@ public class ItemAdapter extends ArrayAdapter<Book> {
 
     private ArrayList<Book> books;
     private Context context;
+    private String current_user;
+    private String receive_user;
 
-    public ItemAdapter(Context context, int resource, ArrayList<Book> objects) {
+    public ItemAdapter(Context context, int resource, ArrayList<Book> objects,String user,String ruser) {
         super(context, resource, objects);
         this.books=objects;
         this.context=context;
+        this.current_user =user;
+        this.receive_user = ruser;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
@@ -68,6 +72,8 @@ public class ItemAdapter extends ArrayAdapter<Book> {
                         Intent intent=new Intent(context,SearchActivity.class);
                         intent.putExtra("Search", b.getBid());
                         intent.putExtra("What","Book");
+                        intent.putExtra("current_user",current_user);
+                        intent.putExtra("receive_user",receive_user);
                         context.startActivity(intent);
                     }
                 });

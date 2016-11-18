@@ -22,6 +22,7 @@ public class ChatActivity extends AppCompatActivity  implements View.OnClickList
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
     private String mRecipient;
+    private String mCurrent;
     private ListView mListView;
     private Date mLastMessageDate = new Date();
     private String mConvoId;
@@ -30,10 +31,13 @@ public class ChatActivity extends AppCompatActivity  implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        mRecipient = getIntent().getStringExtra("receive_user");
+        mCurrent = getIntent().getStringExtra("current_user");
         mListView = (ListView)findViewById(R.id.messages_list);
         mMessages = new ArrayList<>();
         mAdapter = new MessagesAdapter(mMessages);
         mListView.setAdapter(mAdapter);
+       // mListView.scrollTo(0,mListView.getHeight());
 
         setTitle(mRecipient);
         if (getSupportActionBar() != null){
@@ -43,9 +47,12 @@ public class ChatActivity extends AppCompatActivity  implements View.OnClickList
         Button sendMessage = (Button)findViewById(R.id.send_message);
         sendMessage.setOnClickListener(this);
 
-        String[] ids = {"Ajay","-", "Ashok"};
+        String[] ids = {mCurrent,mRecipient};
+        System.out.println(mCurrent);
+        System.out.println(mRecipient);
+        System.out.println(ids);
         Arrays.sort(ids);
-        mConvoId = ids[0]+ids[1]+ids[2];
+        mConvoId = ids[0]+ids[1];
 
         mListener = MessageDataSource.addMessagesListener(mConvoId, this);
     }
@@ -56,14 +63,16 @@ public class ChatActivity extends AppCompatActivity  implements View.OnClickList
         Message msg = new Message();
         msg.setDate(new Date());
         msg.setMessage(newMessage);
-        msg.setSender("Ashok");
+        msg.setSender(mCurrent);
 
-        MessageDataSource.saveMessage(msg, mConvoId);
+        MessageDataSource.saveMessage(msg, mConvoId,mCurrent);
     }
     @Override
     public void onMessageAdded(Message message) {
         mMessages.add(message);
         mAdapter.notifyDataSetChanged();
+
+
     }
 
     @Override
@@ -86,18 +95,18 @@ public class ChatActivity extends AppCompatActivity  implements View.OnClickList
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)nameView.getLayoutParams();
 
             int sdk = Build.VERSION.SDK_INT;
-            if (message.getSender().equals("Ashok")){
+            if (message.getSender().equals(mCurrent)){
                 if (sdk >= Build.VERSION_CODES.JELLY_BEAN) {
-                   // nameView.setBackground(getDrawable(R.drawable.bubble_right_green));
+                   nameView.setBackground(getDrawable(R.mipmap.chat_left));
                 } else{
-                    //nameView.setBackgroundDrawable(getDrawable(R.drawable.bubble_right_green));
+                    nameView.setBackgroundDrawable(getDrawable(R.mipmap.chat_left));
                 }
                 layoutParams.gravity = Gravity.RIGHT;
             }else{
                 if (sdk >= Build.VERSION_CODES.JELLY_BEAN) {
-                    //nameView.setBackground(getDrawable(R.drawable.bubble_left_gray));
+                    nameView.setBackground(getDrawable(R.mipmap.chat_right));
                 } else{
-                   // nameView.setBackgroundDrawable(getDrawable(R.drawable.bubble_left_gray));
+                   nameView.setBackgroundDrawable(getDrawable(R.mipmap.chat_right));
                 }
                 layoutParams.gravity = Gravity.LEFT;
             }

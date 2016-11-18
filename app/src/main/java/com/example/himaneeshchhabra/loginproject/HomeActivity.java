@@ -69,6 +69,7 @@ public class HomeActivity extends AppCompatActivity {
         handleIntent(getIntent());
         setContentView(R.layout.activity_home);
         user = getIntent().getStringExtra("user_name");
+        System.out.println("Hello "+user);
         final String[] from = new String[] {"username","image"};
         final int[] to = new int[] {R.id.text,R.id.image};
         myAdapter = new SimpleCursorAdapter(HomeActivity.this, R.layout.suggestion, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
@@ -98,6 +99,9 @@ public class HomeActivity extends AppCompatActivity {
         new AsyncFetch().execute();
 
     }
+    public void onBackPressed()
+    {}
+
     private void prepareBooks()
     {
         new fetch_popular().execute();
@@ -108,6 +112,7 @@ public class HomeActivity extends AppCompatActivity {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Bundle bundle = intent.getBundleExtra(SearchManager.APP_DATA);
             String type = bundle.getString("type");
+            user = bundle.getString("current_user");
             System.out.println(type);
             Intent in = new Intent(this,SearchActivity.class);
             if(type.equals("User")) {
@@ -123,6 +128,7 @@ public class HomeActivity extends AppCompatActivity {
                 in.putExtra("What",type);
             }
             in.putExtra("current_user",user);
+            System.out.println("kasjd "+user);
             startActivity(in);
         }
     }
@@ -172,6 +178,8 @@ public class HomeActivity extends AppCompatActivity {
                         bundle.putString("type",strArrData[cursor.getInt(0)].type);
                         bundle.putString("bid",strArrData[cursor.getInt(0)].bid);
                     }
+                    System.out.println("fffff "+user);
+                    bundle.putString("current_user",user);
                     searchView.setAppSearchData(bundle);
 
 
