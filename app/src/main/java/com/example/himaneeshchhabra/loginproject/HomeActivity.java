@@ -249,7 +249,7 @@ public class HomeActivity extends AppCompatActivity {
         switch(item.getItemId())
         {
             case R.id.add_book:
-                Intent intent1=new Intent(getApplicationContext(),BookActivity.class);
+                Intent intent1=new Intent(getApplicationContext(),BookScanActivity.class);
                 startActivity(intent1);
                 break;
             case R.id.logout:

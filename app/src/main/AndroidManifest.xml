@@ -41,7 +41,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ChatActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HomeActivity"
             android:screenOrientation="portrait">
@@ -58,8 +58,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SearchActivity"
-            android:theme="@style/BookTheme"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/BookTheme" />
+        <activity android:name=".BookScanActivity"></activity>
     </application>
 
 </manifest>

@@ -4,4 +4,5 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="title">Books trending now</string>
     <string name="send">Send Message</string>
+    <string name="barcode">Scan Bar Code</string>
 </resources>

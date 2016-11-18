@@ -1,0 +1,136 @@
+package com.example.himaneeshchhabra.loginproject;
+
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+
+import static android.R.attr.password;
+
+public class BookScanActivity extends AppCompatActivity {
+
+    private Button mButton_bar;
+    private static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book_scan);
+        initialize();
+    }
+    public void initialize()
+    {
+        mButton_bar = (Button)findViewById(R.id.button_bar);
+    }
+    public void onClick(View v)
+    {
+        IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+        scanIntegrator.initiateScan();
+
+
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanningResult != null) {
+            String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            System.out.println(scanContent);
+            System.out.println(scanFormat);
+            Toast.makeText(this,"Book scanned",Toast.LENGTH_SHORT).show();
+            new fetchid().execute(scanContent);
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "No scan data received!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+    private class fetchid extends AsyncTask<String,String,String> {
+        ProgressDialog pdLoading = new ProgressDialog(BookScanActivity.this);
+        HttpURLConnection conn;
+        URL URL = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //this method will be running on UI thread
+            pdLoading.setMessage("\tLoading...");
+            pdLoading.setCancelable(false);
+            pdLoading.show();
+
+        }
+
+        protected String doInBackground(String... params) {
+            String result = "";
+            String isbn = params[0];
+            String url = Link.link + "/test/fetchisbn.php";
+            try {
+                URL = new URL(url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) URL.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String post_data = URLEncoder.encode("isbn", "UTF-8") + "=" + URLEncoder.encode(isbn, "UTF-8");
+                bufferedWriter.write(post_data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                result = "";
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    result = result + line;
+                }
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            pdLoading.dismiss();
+            System.out.println(result);
+        }
+    }
+
+
+
+
+
+
+}
