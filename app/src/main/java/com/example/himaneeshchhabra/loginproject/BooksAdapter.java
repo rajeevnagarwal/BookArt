@@ -31,15 +31,11 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView title;
         public ImageView thumbnail;
-
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
         }
-
-
-
     }
 
 

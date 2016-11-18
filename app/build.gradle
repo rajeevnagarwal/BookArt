@@ -9,6 +9,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "24.0.3"
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.himaneeshchhabra.loginproject"
         minSdkVersion 15
         targetSdkVersion 19

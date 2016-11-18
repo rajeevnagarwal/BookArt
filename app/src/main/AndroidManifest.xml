@@ -56,7 +56,6 @@
         <activity
             android:name=".SearchActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

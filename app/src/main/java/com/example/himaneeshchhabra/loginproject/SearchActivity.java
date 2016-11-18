@@ -8,7 +8,9 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,7 +34,6 @@ public class SearchActivity extends ListActivity {
     public static String[] addr, profession, contact, longitude, latitude, age;
     private ItemAdapter adapter;
     public int size;
-
     private ImageView imageView;
 
     private BookAdapter bookAdapter;
@@ -118,6 +119,7 @@ public class SearchActivity extends ListActivity {
                     byte[] decodedString = Base64.decode(image[j], Base64.DEFAULT);
                     Bitmap decodeByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     imageView.setImageBitmap(decodeByte);
+                    final int finalJ = j;
                     adapter = new ItemAdapter(SearchActivity.this, R.layout.list_item, listItems);
                     setListAdapter(adapter);
                 }

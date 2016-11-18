@@ -361,7 +361,7 @@ public class BookActivity extends AppCompatActivity {
             try {
 
                 // Enter URL address where your php file resides or your JSON file address
-                url = new URL("http://192.168.48.74"+"/test/fetch_book.php");
+                url = new URL(Link.link+"/test/fetch_book.php");
 
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
