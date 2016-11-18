@@ -53,7 +53,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send Message"
+        android:text="@string/send"
         android:onClick="onSend"
         android:id="@+id/smsg"
         />
