@@ -40,6 +40,9 @@
             android:name=".BookActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ChatActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".HomeActivity"
             android:screenOrientation="portrait">
             <intent-filter>

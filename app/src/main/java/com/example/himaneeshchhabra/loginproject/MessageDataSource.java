@@ -30,6 +30,7 @@ public class MessageDataSource {
         msg.put(COLUMN_TEXT, message.getMessage());
         msg.put(COLUMN_SENDER,sender);
         sRef.child(convoId).child(key).setValue(msg);
+       // sRef.child(convoId).setValue(msg);
     }
     public static MessagesListener addMessagesListener(String convoId, final MessagesCallbacks callbacks){
         MessagesListener listener = new MessagesListener(callbacks);
