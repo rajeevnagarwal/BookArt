@@ -250,6 +250,7 @@ public class HomeActivity extends AppCompatActivity {
         {
             case R.id.add_book:
                 Intent intent1=new Intent(getApplicationContext(),BookScanActivity.class);
+                intent1.putExtra("current_user",user);
                 startActivity(intent1);
                 break;
             case R.id.logout:

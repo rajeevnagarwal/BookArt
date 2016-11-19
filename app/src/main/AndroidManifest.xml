@@ -60,7 +60,8 @@
             android:name=".SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BookTheme" />
-        <activity android:name=".BookScanActivity"></activity>
+        <activity android:name=".BookScanActivity" />
+        <activity android:name=".NewBookActivity"></activity>
     </application>
 
 </manifest>

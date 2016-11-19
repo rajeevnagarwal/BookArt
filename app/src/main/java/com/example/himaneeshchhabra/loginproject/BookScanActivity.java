@@ -17,6 +17,10 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -35,15 +39,21 @@ public class BookScanActivity extends AppCompatActivity {
 
     private Button mButton_bar;
     private static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
+    private String code;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_scan);
         initialize();
+        System.out.println(user);
     }
     public void initialize()
     {
+
+        code = "";
+        user = getIntent().getStringExtra("current_user");
         mButton_bar = (Button)findViewById(R.id.button_bar);
     }
     public void onClick(View v)
@@ -61,6 +71,7 @@ public class BookScanActivity extends AppCompatActivity {
             System.out.println(scanContent);
             System.out.println(scanFormat);
             Toast.makeText(this,"Book scanned",Toast.LENGTH_SHORT).show();
+            code = scanContent;
             new fetchid().execute(scanContent);
         } else {
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -124,8 +135,32 @@ public class BookScanActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             pdLoading.dismiss();
+            if(result.equals("no"))
+            {
 
-            System.out.println(result);
+            }
+            else
+            {
+                Intent i = new Intent(getApplicationContext(),NewBookActivity.class);;
+                try {
+
+                    JSONArray obj = new JSONArray(result);
+                    System.out.println(result);
+                    i.putExtra("book_name",obj.getJSONObject(0).getString("bookname"));
+                    i.putExtra("bid",obj.getJSONObject(0).getString("bid"));
+                    i.putExtra("current_user",user);
+                    i.putExtra("code",code);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+
+                }
+                startActivity(i);
+
+
+            }
+
         }
     }
 

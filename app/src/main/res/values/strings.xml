@@ -5,4 +5,7 @@
     <string name="title">Books trending now</string>
     <string name="send">Send Message</string>
     <string name="barcode">Scan Bar Code</string>
+    <string name="sell">Is this book for sale?</string>
+    <string name="rent">Is this book available for borrowing?</string>
+    <string name="add">Add Book</string>
 </resources>
