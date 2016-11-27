@@ -12,6 +12,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.support.v4.view.MenuItemCompat;
@@ -50,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends MyBaseActivity {
 
     public static final int CONNECTION_TIMEOUT = 10000;
     public static final int READ_TIMEOUT = 15000;
@@ -96,15 +98,36 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         prepareBooks();
-        new AsyncFetch().execute();
+        if(checkConnection()) {
+            new AsyncFetch().execute();
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"Connect to Network first",Toast.LENGTH_SHORT).show();
+        }
 
     }
     public void onBackPressed()
     {}
+    public Boolean checkConnection()
+    {
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected())
+            return true;
+        else
+            return false;
+    }
 
     private void prepareBooks()
     {
-        new fetch_popular().execute();
+        if(checkConnection()) {
+            new fetch_popular().execute();
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"Connect to network first",Toast.LENGTH_SHORT).show();
+        }
     }
     private void handleIntent(Intent intent)
     {

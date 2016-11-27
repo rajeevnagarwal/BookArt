@@ -2,6 +2,8 @@ package com.example.himaneeshchhabra.loginproject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,7 +31,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewBookActivity extends AppCompatActivity {
+public class NewBookActivity extends MyBaseActivity {
 
     private String current_user;
     private String code;
@@ -94,9 +96,24 @@ public class NewBookActivity extends AppCompatActivity {
     {
         if(rent.length()>0&&sell.length()>0&&book_name!=null&&bid!=null)
         {
+            if(checkConnection()) {
 
-            new addbook().execute(current_user,bid,sell,rent);
+                new addbook().execute(current_user, bid, sell, rent);
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"Connect to network first",Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+    public Boolean checkConnection()
+    {
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
     private class addbook extends AsyncTask<String,String,String> {
         ProgressDialog pdLoading = new ProgressDialog(NewBookActivity.this);

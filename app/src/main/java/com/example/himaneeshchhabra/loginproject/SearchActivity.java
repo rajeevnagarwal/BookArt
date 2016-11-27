@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -24,7 +26,7 @@ import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 
-public class SearchActivity extends ListActivity {
+public class SearchActivity extends MyListActivity {
 
     ArrayList<Book> listItems = new ArrayList<Book>();
     ArrayList<User> bookItems = new ArrayList<User>();
@@ -212,46 +214,60 @@ public class SearchActivity extends ListActivity {
         i.putExtra("receive_user",name);
         startActivity(i);
     }
+    public Boolean checkConnection()
+    {
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected())
+            return true;
+        else
+            return false;
+    }
 
 
 
 
     private synchronized void sendRequest() {
+        if(checkConnection()) {
+            pDialog = new ProgressDialog(SearchActivity.this);
+            pDialog.setMessage("Loading");
+            pDialog.setCancelable(false);
+            pDialog.show();
+            StringRequest stringRequest = new StringRequest(JSON_URL,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
 
-        pDialog = new ProgressDialog(SearchActivity.this);
-        pDialog.setMessage("Loading");
-        pDialog.setCancelable(false);
-        pDialog.show();
-        StringRequest stringRequest = new StringRequest(JSON_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
+                            System.out.println("Inside onResponse " + What + " " + JSON_URL + " " + index);
 
-                        System.out.println("Inside onResponse "+What+" "+JSON_URL+" "+index);
+                            if (What.equals("User")) {
+                                System.out.println("User satisfies");
+                                showJSON(response);
 
-                        if (What.equals("User")) {
-                            System.out.println("User satisfies");
-                            showJSON(response);
+                            } else if (What.equals("Book")) {
+                                System.out.println("Book satisfies");
+                                showJSONBook(response);
+                            }
 
-                        } else if (What.equals("Book")) {
-                            System.out.println("Book satisfies");
-                            showJSONBook(response);
                         }
+                    },
+                    new Response.ErrorListener() {
 
-                    }
-                },
-                new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println("Inside onResponse Err");
+                            Toast.makeText(SearchActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        System.out.println("Inside onResponse Err");
-                        Toast.makeText(SearchActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-        System.out.println("Outside onResponse "+What+" "+JSON_URL+" "+index);
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+            System.out.println("Outside onResponse " + What + " " + JSON_URL + " " + index);
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"Connect to network first",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showJSON(String json) {

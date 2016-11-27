@@ -3,7 +3,7 @@ package com.example.himaneeshchhabra.loginproject;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class Result_Activity extends AppCompatActivity {
+public class Result_Activity extends MyBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

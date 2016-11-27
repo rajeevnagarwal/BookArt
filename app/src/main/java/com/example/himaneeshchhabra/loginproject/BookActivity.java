@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -18,11 +20,13 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kosalgeek.android.photoutil.CameraPhoto;
@@ -46,19 +50,20 @@ import java.util.ArrayList;
 
 import static android.R.id.list;
 
-public class BookActivity extends AppCompatActivity {
+public class BookActivity extends MyBaseActivity {
 
-    Button btn,logout1;
+    Button logout1;
     CameraPhoto cameraPhoto;
     GalleryPhoto galleryPhoto;
     ImageView camera,gallery,book_image;
     final int CAMERA_REQUEST=13323;
     final int GALLERY_REQUEST=22131;
     String selectedPhoto;
+    EditText bookname,bookauthor,bookprice;
     String bname,bauthor,bprice;
     Button insert_book;
-    AutoCompleteTextView view;
-    EditText book_sell,book_rent;
+    Spinner book_sell,book_rent;
+    String sell,rent;
     private  final String TAG=this.getClass().getName();
     int flag1=0;
     int flag2=0;
@@ -73,17 +78,47 @@ public class BookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("");
+        list.add("yes");
+        list.add("no");
+        rent="";sell="";bname="";bauthor="";bprice="";
         setContentView(R.layout.activity_book);
-        btn = (Button)findViewById(R.id.button4);
         camera=(ImageView)findViewById(R.id.camera);
         gallery=(ImageView)findViewById(R.id.gallery);
         insert_book = (Button)findViewById(R.id.insert_book);
         book_image = (ImageView)findViewById(R.id.book_image);
-        view = (AutoCompleteTextView)findViewById(R.id.auto);
         cameraPhoto = new CameraPhoto(getApplicationContext());
-        book_sell=(EditText)findViewById(R.id.book_sell);
-        book_rent=(EditText)findViewById(R.id.book_rent);
-        new AsyncFetch().execute();
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
+        bookname = (EditText)findViewById(R.id.bookname);
+        bookauthor = (EditText)findViewById(R.id.bookauthor);
+        bookprice = (EditText)findViewById(R.id.bookprice);
+        book_sell=(Spinner)findViewById(R.id.book_sell);
+        book_rent=(Spinner)findViewById(R.id.book_rent);
+        book_sell.setAdapter(dataAdapter);
+        book_rent.setAdapter(dataAdapter);
+        book_rent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                rent = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        book_sell.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sell = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         galleryPhoto=new GalleryPhoto(getApplicationContext());
         System.out.println("Hello"+booklist);
         Intent i=new Intent();
@@ -95,111 +130,54 @@ public class BookActivity extends AppCompatActivity {
         Intent intent=new Intent(getApplicationContext(),MainActivity.class);
         startActivity(intent);
     }
-    public void onAdd(View v)
+    public Boolean checkConnection()
     {
-
-        if(view.getText().toString().isEmpty()|| book_rent.getText().toString().isEmpty()|| book_sell.getText().toString().isEmpty()||list.contains(view.getText().toString()))
-        {
-            if(list.contains(view.getText().toString()))
-            {
-                if(book_rent.getText().toString().isEmpty()|| book_sell.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Please all the fields", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "Book already present", Toast.LENGTH_LONG).show();
-                    String type = "registeruserbook";
-                    String user_name = (String) bund.getString("user_name");
-                    Toast.makeText(getApplicationContext(), user_name, Toast.LENGTH_LONG).show();
-                    String pos = "";
-                    for (int i = 0; i < list.size(); i++) {
-                        if (list.get(i).equals(view.getText().toString())) {
-                            pos = booklist.get(i).bid;
-                            break;
-                        }
-                    }
-                    new BackgroundWorker(getApplicationContext()).execute(type, user_name, "" + pos, book_sell.getText().toString(), book_rent.getText().toString());
-                }
-                //System.out.println("Himu:-"+user_name);
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "Please all the fields", Toast.LENGTH_LONG).show();
-            }
-        }
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected())
+            return true;
         else
-        {
-            Toast.makeText(getApplicationContext(),"Sorry this book is not in our databse. so u have to add it",Toast.LENGTH_LONG).show();
-            LayoutInflater li = LayoutInflater.from(this);
-            View promptview = li.inflate(R.layout.add_book, null);
-            AlertDialog.Builder form = new AlertDialog.Builder(this);
-            form.setTitle("Enter book details");
-            form.setView(promptview);
-            final EditText name = (EditText) promptview.findViewById(R.id.name);
-            final EditText author = (EditText) promptview.findViewById(R.id.author);
-            final EditText price = (EditText) promptview.findViewById(R.id.price);
-            form.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    name.setText(view.getText().toString());
-                    if (name.getText().length() > 0 && price.getText().length() > 0 && author.getText().length() > 0)
-                    {
-                        bname = name.getText().toString();
-                        bauthor = author.getText().toString();
-                        bprice = price.getText().toString();
-                        flag4 = 1;
-                        if(flag3==1&&flag4==1)
-                        {
-                            String type="bookregister";
-                            String user_name = (String) bund.getString("user_name");
-                            BackgroundWorker backgroundWorker = new BackgroundWorker(getApplicationContext());
-                            backgroundWorker.execute(type,bname,bauthor,bprice,selectedPhoto,user_name,book_sell.getText().toString(),book_rent.getText().toString());
-                        }
-                        else if(flag3==0)
-                        {
-                            Toast.makeText(getApplicationContext(),"Please upload the photo",Toast.LENGTH_LONG).show();
-                        }
-                        else if(flag4==0)
-                        {
-                            Toast.makeText(getApplicationContext(),"Please fill all the mandatory fields",Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "All the fields are required", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }
-            });
-            AlertDialog dialog = form.create();
-            dialog.show();
-        }
-
-
-
+            return false;
     }
-    public void onInsert(View v)
+
+  public void onInsert(View v)
     {
-        if(flag3==1&&flag4==1)
+        if(flag3==1)
         {
             String type="bookregister";
+            bname = bookname.getText().toString();
+            bauthor = bookauthor.getText().toString();
+            bprice = bookprice.getText().toString();
             BackgroundWorker backgroundWorker = new BackgroundWorker(getApplicationContext());
             String user_name = (String) bund.getString("user_name");
-            if(book_sell.getText().toString().isEmpty()||book_rent.getText().toString().isEmpty())
-            {
-                Toast.makeText(getApplicationContext(),"Please fill whether book is avialble for sell and rent",Toast.LENGTH_LONG).show();
+            String isbn = (String)bund.getString("code");
+            if(user_name!=null&&isbn!=null) {
+                if (sell.equals("") || rent.toString().equals("") || bname.equals("") || bauthor.equals("") || bprice.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please fill all the fields above", Toast.LENGTH_LONG).show();
+                } else {
+                    if(checkConnection()) {
+                        backgroundWorker.execute(type, bname, bauthor, bprice, selectedPhoto, user_name, book_sell.toString(), book_rent.toString(), isbn);
+                        Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Please connect to network first", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
-            else {
-                backgroundWorker.execute(type, bname, bauthor, bprice, selectedPhoto, user_name, book_sell.getText().toString(), book_rent.getText().toString());
-
+            else
+            {
+                Toast.makeText(getApplicationContext(),"Internal Error",Toast.LENGTH_SHORT).show();
             }
         }
         else if(flag3==0)
         {
             Toast.makeText(getApplicationContext(),"Please upload the photo",Toast.LENGTH_LONG).show();
         }
-        else if(flag4==0)
+        /*else if(flag4==0)
         {
             Toast.makeText(getApplicationContext(),"Please fill all the mandatory fields",Toast.LENGTH_LONG).show();
-        }
+        }*/
     }
     public void onUpload(View v)
     {
@@ -221,7 +199,6 @@ public class BookActivity extends AppCompatActivity {
         }
 
     }
-
     public void onCamera(View v)
     {
         try {
@@ -339,135 +316,6 @@ public class BookActivity extends AppCompatActivity {
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source,0,0,source.getWidth(),source.getHeight(),matrix,true);
     }
-    private class AsyncFetch extends AsyncTask<String, String, String> {
 
-        ProgressDialog pdLoading = new ProgressDialog(BookActivity.this);
-        HttpURLConnection conn;
-        URL url = null;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            //this method will be running on UI thread
-            pdLoading.setMessage("\tLoading...");
-            pdLoading.setCancelable(false);
-            pdLoading.show();
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-
-                // Enter URL address where your php file resides or your JSON file address
-                url = new URL(Link.link+"/test/fetch_book.php");
-
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                return e.toString();
-            }
-            try {
-
-                // Setup HttpURLConnection class to send and receive data from php and mysql
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(500);
-                conn.setConnectTimeout(500);
-                conn.setRequestMethod("GET");
-
-                // setDoOutput to true as we receive data
-                conn.setDoOutput(true);
-                conn.connect();
-
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-                return e1.toString();
-            }
-
-            try {
-
-                int response_code = conn.getResponseCode();
-
-                // Check if successful connection made
-                if (response_code == HttpURLConnection.HTTP_OK) {
-
-                    // Read data sent from server
-                    InputStream input = conn.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                    StringBuilder result = new StringBuilder();
-                    String line;
-
-                    while ((line = reader.readLine()) != null) {
-                        result.append(line);
-                    }
-
-                    // Pass data to onPostExecute method
-                    return (result.toString());
-
-                } else {
-                    return("Connection error");
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                return e.toString();
-            } finally {
-                conn.disconnect();
-            }
-
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            //this method will be running on UI thread
-            ArrayList<Auto_Suggest> names = new ArrayList<Auto_Suggest>();
-
-            pdLoading.dismiss();
-
-
-            if(result.equals("no rows")) {
-
-                // Do some action if no data from database
-
-            }else{
-
-                try {
-
-                    System.out.println(result);
-                    JSONArray jArray = new JSONArray(result);
-
-                    // Extract data from json and store into ArrayList
-                    for (int i = 0; i < jArray.length(); i++) {
-                        JSONObject json_data = jArray.getJSONObject(i);
-                        names.add(new Auto_Suggest(json_data.getString("username"),json_data.getString("bid")));
-                    }
-                    System.out.println("hello");
-                    System.out.println(names);
-                    booklist = names;
-                    System.out.println("Books:"+booklist);
-                    for(int i=0;i<booklist.size();i++)
-                    {
-                        list.add(booklist.get(i).name);
-                    }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.mytextview,list.toArray(new String[list.size()]));
-                    view.setThreshold(1);
-                    view.setAdapter(adapter);
-                    view.setTextColor(Color.RED);
-
-                } catch (JSONException e) {
-                    // You to understand what actually error is and handle it appropriately
-                    Toast.makeText(BookActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                    Toast.makeText(BookActivity.this, result.toString(), Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-        }
-
-    }
 
 }

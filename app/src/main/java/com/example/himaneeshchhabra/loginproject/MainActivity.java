@@ -2,6 +2,8 @@ package com.example.himaneeshchhabra.loginproject;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,7 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends MyBaseActivity
 {
     Button button1,button2;
     EditText editText1,editText2;
@@ -42,7 +44,13 @@ public class MainActivity extends AppCompatActivity
                 {
                     BackgroundWorker backgroundWorker=new BackgroundWorker(getApplicationContext());
                     String type="login";
-                    backgroundWorker.execute(type,editText1.getText().toString(),editText2.getText().toString());
+                    if(checkConnection()) {
+                        backgroundWorker.execute(type, editText1.getText().toString(), editText2.getText().toString());
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"Connect to network first",Toast.LENGTH_SHORT).show();
+                    }
 
                 }
             }
@@ -56,5 +64,14 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
+    }
+    public Boolean checkConnection()
+    {
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
 }

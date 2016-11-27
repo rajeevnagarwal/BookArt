@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -35,7 +37,7 @@ import java.net.URLEncoder;
 
 import static android.R.attr.password;
 
-public class BookScanActivity extends AppCompatActivity {
+public class BookScanActivity extends MyBaseActivity {
 
     private Button mButton_bar;
     private static final String ACTION_SCAN = "com.google.zxing.client.android.SCAN";
@@ -63,6 +65,15 @@ public class BookScanActivity extends AppCompatActivity {
 
 
     }
+    public Boolean checkConnection()
+    {
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected())
+            return true;
+        else
+            return false;
+    }
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
@@ -72,7 +83,12 @@ public class BookScanActivity extends AppCompatActivity {
             System.out.println(scanFormat);
             Toast.makeText(this,"Book scanned",Toast.LENGTH_SHORT).show();
             code = scanContent;
-            new fetchid().execute(scanContent);
+            if(checkConnection()) {
+                new fetchid().execute(scanContent);
+            }else
+            {
+                Toast.makeText(getApplicationContext(),"Connect to network first",Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast toast = Toast.makeText(getApplicationContext(),
                     "No scan data received!", Toast.LENGTH_SHORT);
@@ -137,6 +153,10 @@ public class BookScanActivity extends AppCompatActivity {
             pdLoading.dismiss();
             if(result.equals("no"))
             {
+                    Intent i = new Intent(getApplicationContext(),BookActivity.class);
+                    i.putExtra("user_name",user);
+                    i.putExtra("code",code);
+                    startActivity(i);
 
             }
             else

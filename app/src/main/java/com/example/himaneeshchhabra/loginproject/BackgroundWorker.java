@@ -133,6 +133,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String>
                 String username = params[5];
                 String available_for_selling=params[6];
                 String available_for_renting=params[7];
+                String isbn = params[8];
                 URL url = new URL(bookregister_url);
                 HttpURLConnection httpURLConnection=(HttpURLConnection)url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -140,7 +141,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String>
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream=httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-                String post_data= URLEncoder.encode("bookname","UTF-8")+"="+URLEncoder.encode(bookname,"UTF-8")+"&"+URLEncoder.encode("authorname","UTF-8")+"="+URLEncoder.encode(authorname,"UTF-8")+"&"+URLEncoder.encode("marketprice","UTF-8")+"="+URLEncoder.encode(marketprice,"UTF-8")+"&"+URLEncoder.encode("image","UTF-8")+"="+URLEncoder.encode(image,"UTF-8")+"&"+URLEncoder.encode("username","UTF-8")+"="+URLEncoder.encode(username,"UTF-8")+"&"+URLEncoder.encode("available_for_selling","UTF-8")+"="+URLEncoder.encode(available_for_selling,"UTF-8")+"&"+URLEncoder.encode("available_for_renting","UTF-8")+"="+URLEncoder.encode(available_for_renting,"UTF-8");
+                String post_data= URLEncoder.encode("bookname","UTF-8")+"="+URLEncoder.encode(bookname,"UTF-8")+"&"+URLEncoder.encode("authorname","UTF-8")+"="+URLEncoder.encode(authorname,"UTF-8")+"&"+URLEncoder.encode("marketprice","UTF-8")+"="+URLEncoder.encode(marketprice,"UTF-8")+"&"+URLEncoder.encode("image","UTF-8")+"="+URLEncoder.encode(image,"UTF-8")+"&"+URLEncoder.encode("username","UTF-8")+"="+URLEncoder.encode(username,"UTF-8")+"&"+URLEncoder.encode("available_for_selling","UTF-8")+"="+URLEncoder.encode(available_for_selling,"UTF-8")+"&"+URLEncoder.encode("available_for_renting","UTF-8")+"="+URLEncoder.encode(available_for_renting,"UTF-8")+"&"+URLEncoder.encode("isbn","UTF-8")+"="+URLEncoder.encode(isbn,"UTF-8");
                 bufferedWriter.write(post_data);
                 bufferedWriter.flush();
                 bufferedWriter.close();

@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class SignupActivity extends AppCompatActivity
+public class SignupActivity extends MyBaseActivity
 {
     private  final String TAG=this.getClass().getName();
     ImageView imageView1, imageView2, imageView3,imageView4;
@@ -167,14 +169,29 @@ public class SignupActivity extends AppCompatActivity
                         String image = selectedPhoto;
                         String type="register";
                         BackgroundWorker backgroundWorker = new BackgroundWorker(getApplicationContext());
-                        backgroundWorker.execute(type,username,password,name,address,age,gender,profession,image,contact,String.valueOf(longitude),String.valueOf(latitude));
-                        ///get the latidude, longitude and image
+                        if(checkConnection()) {
+                            backgroundWorker.execute(type, username, password, name, address, age, gender, profession, image, contact, String.valueOf(longitude), String.valueOf(latitude));
+                            ///get the latidude, longitude and image
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(),"connect to network first",Toast.LENGTH_SHORT).show();
+                        }
 
                     }
 
                 }
             }
         });
+    }
+    public Boolean checkConnection()
+    {
+        ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo!=null&&networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
 
     @Override

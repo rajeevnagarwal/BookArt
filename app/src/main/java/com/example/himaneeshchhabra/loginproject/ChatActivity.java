@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class ChatActivity extends AppCompatActivity  implements View.OnClickListener,MessageDataSource.MessagesCallbacks{
+public class ChatActivity extends MyBaseActivity  implements View.OnClickListener,MessageDataSource.MessagesCallbacks{
 
     private ArrayList<Message> mMessages;
     private MessagesAdapter mAdapter;
@@ -98,16 +99,24 @@ public class ChatActivity extends AppCompatActivity  implements View.OnClickList
             int sdk = Build.VERSION.SDK_INT;
             if (message.getSender().equals(mCurrent)){
                 if (sdk >= Build.VERSION_CODES.JELLY_BEAN) {
-                   nameView.setBackground(getDrawable(R.mipmap.chat_left));
+                    //convertView.setBackground(getDrawable(R.drawable.form_xml));
+                    nameView.setBackgroundColor(getResources().getColor(R.color.light_blue));
+
                 } else{
-                    nameView.setBackgroundDrawable(getDrawable(R.mipmap.chat_left));
+                    //convertView.setBackgroundDrawable(getDrawable(R.drawable.form_xml));
+                    nameView.setBackgroundColor(getResources().getColor(R.color.light_blue));
+
                 }
                 layoutParams.gravity = Gravity.RIGHT;
             }else{
                 if (sdk >= Build.VERSION_CODES.JELLY_BEAN) {
-                    nameView.setBackground(getDrawable(R.mipmap.chat_right));
+                    //convertView.setBackground(getDrawable(R.drawable.form_xml));
+                    nameView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
                 } else{
-                   nameView.setBackgroundDrawable(getDrawable(R.mipmap.chat_right));
+                   // convertView.setBackgroundDrawable(getDrawable(R.drawable.form_xml));
+                    nameView.setBackgroundColor(getResources().getColor(R.color.light_green));
+
                 }
                 layoutParams.gravity = Gravity.LEFT;
             }
