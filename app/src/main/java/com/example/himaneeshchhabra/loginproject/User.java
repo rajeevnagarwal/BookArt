@@ -9,12 +9,14 @@ public class User {
     private String Age;
     private String image;
     private String username;
+   //private Integer balance;
     public User(String name,String contact,String age,String img,String username){
         this.Name=name;
         this.Contact=contact;
         this.Age=age;
         this.image=img;
         this.username=username;
+        //this.balance=bal;
     }
     public String getName(){
         return this.Name;
@@ -31,4 +33,18 @@ public class User {
     public String getUsername(){
         return this.username;
     }
+   /* public Integer getBalance(){
+        return this.balance;}
+    public boolean isPayable(Integer amt){
+        if(this.balance>=amt){
+            return true;
+        }
+        return false;
+    }
+    public void addBalance(Integer bal){
+        this.balance=this.balance+bal;
+    }
+    public void deductBalance(Integer bal){
+        this.balance=this.balance-bal;
+    }*/
 }

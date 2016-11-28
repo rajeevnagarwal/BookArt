@@ -1,6 +1,7 @@
 package com.example.himaneeshchhabra.loginproject;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -32,6 +33,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.support.v7.widget.SearchView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -100,6 +103,12 @@ public class HomeActivity extends MyBaseActivity {
         prepareBooks();
         if(checkConnection()) {
             new AsyncFetch().execute();
+            /*if(strArrData==null)
+            {
+                Toast.makeText(getApplicationContext(),"Could not fetch data",Toast.LENGTH_LONG).show();
+                Intent i = new Intent(this,HomeActivity.class);
+                startActivity(i);
+            }*/
         }
         else
         {
@@ -123,6 +132,12 @@ public class HomeActivity extends MyBaseActivity {
     {
         if(checkConnection()) {
             new fetch_popular().execute();
+            /*if(albumList.isEmpty())
+            {
+                Toast.makeText(getApplicationContext(),"Could not fetch data",Toast.LENGTH_LONG).show();
+                Intent i = new Intent(this,HomeActivity.class);
+                startActivity(i);
+            }*/
         }
         else
         {
@@ -280,6 +295,24 @@ public class HomeActivity extends MyBaseActivity {
                 Intent intent2 = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(intent2);
                 break;
+            case R.id.profile:
+                Dialog payDialog=new Dialog(this);
+                payDialog.setContentView(R.layout.activity_profile);
+                Button addBalance=(Button)findViewById(R.id.Add);
+                final EditText balance=(EditText)findViewById(R.id.Add_bal);
+                payDialog.setCancelable(true);
+                addBalance.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(balance.getText().equals("")){
+                            Toast.makeText(getApplicationContext(),"Please Enter the Amount !!",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+
+                        }
+                    }
+                });
+                payDialog.show();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -408,8 +441,8 @@ public class HomeActivity extends MyBaseActivity {
 
                 } catch (JSONException e) {
                     // You to understand what actually error is and handle it appropriately
-                    Toast.makeText(HomeActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                    Toast.makeText(HomeActivity.this, result.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(HomeActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(HomeActivity.this, result.toString(), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -562,8 +595,8 @@ public class HomeActivity extends MyBaseActivity {
 
                 } catch (JSONException e) {
                     // You to understand what actually error is and handle it appropriately
-                    Toast.makeText(HomeActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                    Toast.makeText(HomeActivity.this, result.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(HomeActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(HomeActivity.this, result.toString(), Toast.LENGTH_LONG).show();
                 }
 
             }

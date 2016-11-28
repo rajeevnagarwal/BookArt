@@ -27,9 +27,94 @@ public class NetworkChangeReceiver extends BroadcastReceiver{
             // i need to update activity ?????
             Activity currentActivity = ((Fire)context.getApplicationContext()).getmCurrentActivity();
             System.out.println("helooasldkjfpasdg");
-            Intent i = new Intent(context,currentActivity.getClass());
+            /*Intent i = new Intent(context,currentActivity.getClass());
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+            context.startActivity(i);*/
+            Intent i = new Intent(context,currentActivity.getClass());
+            if(currentActivity.getClass().getSimpleName().equals("MainActivity"))
+            {
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+
+            }
+            else if(currentActivity.getClass().getSimpleName().equals("SignupActivity"))
+            {
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+            else if(currentActivity.getClass().getSimpleName().equals("BookActivity"))
+            {
+                String user_name = currentActivity.getIntent().getStringExtra("user_name");
+                String isbn = currentActivity.getIntent().getStringExtra("code");
+                i.putExtra("user_name",user_name);
+                i.putExtra("code",isbn);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+
+            }
+            else if(currentActivity.getClass().getSimpleName().equals("ChatActivity"))
+            {
+                String current = currentActivity.getIntent().getStringExtra("receive_user");
+                String receive = currentActivity.getIntent().getStringExtra("current_user");
+                i.putExtra("receive_user",receive);
+                i.putExtra("current_user",current);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+            else if(currentActivity.getClass().getSimpleName().equals("ResultActivity"))
+            {
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+
+            }
+            else if(currentActivity.getClass().getSimpleName().equals("SearchActivity"))
+            {
+                String what = currentActivity.getIntent().getStringExtra("What");
+                String search = currentActivity.getIntent().getStringExtra("Search");
+                String current_user = currentActivity.getIntent().getStringExtra("current_user");
+                i.putExtra("What",what);
+                i.putExtra("Search",search);
+                i.putExtra("current_user",current_user);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+            else if(currentActivity.getClass().getSimpleName().equals("BookScanActivity"))
+            {
+                String current_user = currentActivity.getIntent().getStringExtra("current_user");
+                i.putExtra("current_user",current_user);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+
+
+            }
+            else if(currentActivity.getClass().getSimpleName().equals("NewBookActivity"))
+            {
+                String book_name = currentActivity.getIntent().getStringExtra("book_name");
+                String bid = currentActivity.getIntent().getStringExtra("bid");
+                String code = currentActivity.getIntent().getStringExtra("code");
+                String current_user = currentActivity.getIntent().getStringExtra("current_user");
+                i.putExtra("book_name",book_name);
+                i.putExtra("bid",bid);
+                i.putExtra("code",code);
+                i.putExtra("current_user",current_user);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+
+            }
+        }
+        else
+        {
+            Activity currentActivity = ((Fire)context.getApplicationContext()).getmCurrentActivity();
+            if(!currentActivity.getClass().getSimpleName().equals("SearchActivity")) {
+                ((MyBaseActivity) currentActivity).alert();
+
+            }
+            else
+            {
+                ((MyListActivity) currentActivity).alert();
+
+
+            }
         }
     }
 }

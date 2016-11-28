@@ -336,8 +336,9 @@ public class SearchActivity extends MyListActivity {
             byte[] decodedString= Base64.decode(pj.image[j],Base64.DEFAULT);
             Bitmap decodeByte= BitmapFactory.decodeByteArray(decodedString,0,decodedString.length);
             imageView.setImageBitmap(decodeByte);
-            adapter=new ItemAdapter(SearchActivity.this,R.layout.list_item,listItems,current_user,name);
             name = username[j];
+            adapter=new ItemAdapter(SearchActivity.this,R.layout.list_item,listItems,current_user,name);
+
             setListAdapter(adapter);
                /* index = i + 1;
                 What = "ListBook";
