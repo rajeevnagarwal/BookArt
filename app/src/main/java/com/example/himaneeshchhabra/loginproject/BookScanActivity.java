@@ -140,9 +140,9 @@ public class BookScanActivity extends MyBaseActivity {
                 httpURLConnection.disconnect();
                 return result;
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+               // e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
+               // e.printStackTrace();
             }
 
             return result;
@@ -156,6 +156,7 @@ public class BookScanActivity extends MyBaseActivity {
                     Intent i = new Intent(getApplicationContext(),BookActivity.class);
                     i.putExtra("user_name",user);
                     i.putExtra("code",code);
+                System.out.println("BookActivity "+user);
                     startActivity(i);
 
             }
@@ -170,10 +171,11 @@ public class BookScanActivity extends MyBaseActivity {
                     i.putExtra("bid",obj.getJSONObject(0).getString("bid"));
                     i.putExtra("current_user",user);
                     i.putExtra("code",code);
+                    System.out.println("NewBookActivity "+user);
                 }
                 catch (JSONException e)
                 {
-                    e.printStackTrace();
+                    //e.printStackTrace();
 
                 }
                 startActivity(i);

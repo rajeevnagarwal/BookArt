@@ -28,7 +28,7 @@
             android:background="@drawable/form_xml"
             android:padding="10dp"
             android:id="@+id/bookname"
-            android:hint="Enter book name"/>
+            android:hint="@string/bookname"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="20dp"></LinearLayout>
@@ -38,7 +38,7 @@
             android:background="@drawable/form_xml"
             android:padding="10dp"
             android:id="@+id/bookauthor"
-            android:hint="Enter author name"/>
+            android:hint="@string/authorname"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="20dp"></LinearLayout>
@@ -48,7 +48,7 @@
             android:background="@drawable/form_xml"
             android:padding="10dp"
             android:id="@+id/bookprice"
-            android:hint="Enter book price"/>
+            android:hint="@string/marketprice"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -136,7 +136,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Insert Book"
+            android:text="@string/insert"
             android:id="@+id/insert_book"
             android:background="@drawable/button_xml"
             android:onClick="onInsert"/>
@@ -150,7 +150,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout"
+        android:text="@string/logout"
         android:id="@+id/logout1"
         android:background="@drawable/button_xml"
         android:onClick="onLogout"/>

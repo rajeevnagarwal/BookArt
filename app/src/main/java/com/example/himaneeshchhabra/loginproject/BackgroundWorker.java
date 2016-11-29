@@ -19,6 +19,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import static com.example.himaneeshchhabra.loginproject.CUser.pref;
+
 /**
  * Created by Himaneesh Chhabra on 10/14/2016.
  */
@@ -131,6 +133,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String>
                 String marketprice=params[3];
                 String image=params[4];
                 String username = params[5];
+                my_user_name = username;
                 String available_for_selling=params[6];
                 String available_for_renting=params[7];
                 String isbn = params[8];
@@ -211,7 +214,7 @@ public class BackgroundWorker extends AsyncTask<String,Void,String>
     @Override
     protected void onPreExecute()
     {
-        //alertDialog=new AlertDialog.Builder(context);
+        //alertDialog=m
        //alertDialog.setTitle("Login Status");
     }
 
@@ -222,9 +225,14 @@ public class BackgroundWorker extends AsyncTask<String,Void,String>
         Toast.makeText(context,result,Toast.LENGTH_LONG).show();
         if(result.equals("Inserted into database sucessfully"))
         {
-            Intent i = new Intent(context,BookActivity.class);
+            Intent i = new Intent(context,BookScanActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.putExtra("user_name",my_user_name);
+            System.out.println(my_user_name);
+            System.out.println("BookScanActivity "+my_user_name);
+            MainActivity.pref.edit().putString("current_user",my_user_name);
+            MainActivity.pref.edit().commit();
+            i.putExtra("current_user",my_user_name);
+
             context.startActivity(i);
         }
         if(result.equals("Congrats!!!!!!!!Login is sucessful"))
@@ -232,14 +240,20 @@ public class BackgroundWorker extends AsyncTask<String,Void,String>
             Intent i= new Intent(context,HomeActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.putExtra("user_name",my_user_name);
+            MainActivity.pref.edit().putString("current_user",my_user_name);
+            MainActivity.pref.edit().commit();
+            System.out.println("HomeActivity "+my_user_name);
             context.startActivity(i);
         }
         if(result.equals("Inserted into user_book table database sucessfully"))
         {
             Intent i= new Intent(context,HomeActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            //i.putExtra("user_name",my_user_name);
+            System.out.println(my_user_name);
+            System.out.println("HomeActivity "+my_user_name);
+            MainActivity.pref.edit().putString("current_user",my_user_name);
+            MainActivity.pref.edit().commit();
+            i.putExtra("user_name",my_user_name);
             context.startActivity(i);
         }
 

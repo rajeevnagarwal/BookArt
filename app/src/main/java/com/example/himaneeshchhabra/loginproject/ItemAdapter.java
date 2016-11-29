@@ -47,7 +47,7 @@ import static android.R.attr.onClick;
 /**
  * Created by HARSHIT on 15-Oct-16.
  */
-public class ItemAdapter extends ArrayAdapter<Book> implements View.OnClickListener{
+public class ItemAdapter extends ArrayAdapter<Book> {
 
     private ArrayList<Book> books;
     private Context context;
@@ -86,24 +86,29 @@ public class ItemAdapter extends ArrayAdapter<Book> implements View.OnClickListe
                     @Override
                     public void onClick(View v) {
                         amt = new EditText(context);
-                        new AlertDialog.Builder(context)
-                                .setTitle("Payment")
-                                .setMessage("Enter the amount")
-                                .setView(amt)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        System.out.println(amt.getText().toString());
-                                        // continue with delete
-                                        new Transaction().execute(amt.getText().toString());
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // do nothing
-                                    }
-                                })
-                                .setIcon(R.mipmap.ic_launcher)
-                                .show();
+                        if(current_user.equals(receive_user)){
+                            Toast.makeText(context,"You can't buy from yourself!!",Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Payment")
+                                    .setMessage("Enter the amount")
+                                    .setView(amt)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            System.out.println(amt.getText().toString());
+                                            // continue with delete
+                                            new Transaction().execute(amt.getText().toString());
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // do nothing
+                                        }
+                                    })
+                                    .setIcon(R.mipmap.ic_launcher)
+                                    .show();
+                        }
                         /*Dialog payDialog=new Dialog(getContext());
                         payDialog.setContentView(R.layout.payment);
                         payDialog.setCancelable(true);
@@ -137,25 +142,31 @@ public class ItemAdapter extends ArrayAdapter<Book> implements View.OnClickListe
                 Rent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        amt = new EditText(context);
-                        new AlertDialog.Builder(context)
-                                .setTitle("Payment")
-                                .setMessage("Enter the amount")
-                                .setView(amt)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        System.out.println(amt.getText().toString());
-                                        new Transaction().execute(amt.getText().toString());
-                                        // continue with delete
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // do nothing
-                                    }
-                                })
-                                .setIcon(R.mipmap.ic_launcher)
-                                .show();
+
+                        if(current_user.equals(receive_user)){
+                            Toast.makeText(context,"You can't rent from yourself!!",Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            amt = new EditText(context);
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Payment")
+                                    .setMessage("Enter the amount")
+                                    .setView(amt)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            System.out.println(amt.getText().toString());
+                                            new Transaction().execute(amt.getText().toString());
+                                            // continue with delete
+                                        }
+                                    })
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // do nothing
+                                        }
+                                    })
+                                    .setIcon(R.mipmap.ic_launcher)
+                                    .show();
+                        }
                         /*payDialog=new Dialog(getContext());
                         payDialog.setContentView(R.layout.payment);
                         payDialog.setCancelable(true);
@@ -196,6 +207,7 @@ public class ItemAdapter extends ArrayAdapter<Book> implements View.OnClickListe
                         intent.putExtra("What","Book");
                         intent.putExtra("current_user",current_user);
                         intent.putExtra("receive_user",receive_user);
+                        System.out.println("BookScanActivity "+current_user);
                         context.startActivity(intent);
                     }
                 });
@@ -209,24 +221,7 @@ public class ItemAdapter extends ArrayAdapter<Book> implements View.OnClickListe
         }
         return v;
     }
-    public void onClick(View v)
-    {
-        System.out.println(amt.getText().toString());
-        if(amt.getText().equals("")){
-            Toast.makeText(getContext(),"Enter the Amount to be paid", Toast.LENGTH_LONG);
-        }
-        else{
 
-                                    /*if(current_user.isPayable(Integer.parseInt(amt.getText().toString()))) {
-                                        current_user.deductBalance(Integer.parseInt(amt.getText().toString()));
-                                        receive_user.addBalance(Integer.parseInt(amt.getText().toString()));
-                                    }*/
-            System.out.println(amt.getText());
-            new Transaction().execute(amt.getText().toString());
-        }
-        payDialog.dismiss();
-
-    }
 
 
     private class Transaction extends AsyncTask<String,String,String>{

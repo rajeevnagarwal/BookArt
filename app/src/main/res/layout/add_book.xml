@@ -12,17 +12,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/name"
-            android:hint="Enter book name"/>
+            android:hint="@string/bookname"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/author"
-            android:hint="Enter Author name"/>
+            android:hint="@string/authorname"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/price"
-            android:hint="Enter market price"/>
+            android:hint="@string/marketprice"/>
     </LinearLayout>
 
 </LinearLayout>

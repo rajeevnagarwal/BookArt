@@ -28,17 +28,17 @@ import java.util.ArrayList;
 
 public class SearchActivity extends MyListActivity {
 
-    ArrayList<Book> listItems = new ArrayList<Book>();
-    ArrayList<User> bookItems = new ArrayList<User>();
+    ArrayList<Book> listItems = new ArrayList<Book>(); //List of books with the corresponding user
+    ArrayList<User> bookItems = new ArrayList<User>(); //List of users having a particular book
     ProgressDialog pDialog;
     public static int[] no_borrowed, no_sold, bid, market_price;
     public static String[] names, username, pass, gender, image, bname, author, imagebook;
     public static String[] addr, profession, contact, longitude, latitude, age;
     private ItemAdapter adapter;
     public int size;
-    private String current_user;
+    private String current_user; //corresponding to the logged in user
 
-    private ImageView imageView;
+    private ImageView imageView; //this image will be displayed corresponding to the searched user or book
     private Button msg;
 
     private BookAdapter bookAdapter;
@@ -49,9 +49,9 @@ public class SearchActivity extends MyListActivity {
 
     private TextView viewDetails, labels;
 
-    private String What;
-    private String search;
-    private Integer id;
+    private String What; //Indicates what kinds of object needs to be searched
+    private String search; //Indicates the Id of corresponding to the objected searched
+    private Integer id; //Id corresponding to the objected searched
     private String name;
 
 
@@ -69,123 +69,7 @@ public class SearchActivity extends MyListActivity {
         msg = (Button)findViewById(R.id.smsg);
         //pDialog = new ProgressDialog(getApplicationContext());
 
-        if (savedInstanceState != null) {
-            username = new String[size];
-            names = new String[size];
-            longitude=new String[size];
-            latitude=new String[size];
-            addr=new String[size];
-            profession=new String[size];
-            contact=new String[size];
-            age=new String[size];
-            gender=new String[size];
-            pass=new String[size];
-            image=new String[size];
-            bname=new String[size];
-            author=new String[size];
-            imagebook=new String[size];
-            no_borrowed= new int[size];
-            market_price= new int[size];
-            no_sold= new int[size];
-            bid= new int[size];
-            username = savedInstanceState.getStringArray("Username");
-            pass = savedInstanceState.getStringArray("password");
-            names = savedInstanceState.getStringArray("name");
-            addr = savedInstanceState.getStringArray("address");
-            age = savedInstanceState.getStringArray("age");
-            gender = savedInstanceState.getStringArray("gender");
-            profession = savedInstanceState.getStringArray("profession");
-            contact = savedInstanceState.getStringArray("contact");
-            longitude = savedInstanceState.getStringArray("longitude");
-            latitude = savedInstanceState.getStringArray("latitude");
-            bid = savedInstanceState.getIntArray("bid");
-            bname = savedInstanceState.getStringArray("bname");
-            author = savedInstanceState.getStringArray("author");
-            market_price = savedInstanceState.getIntArray("market_price");
-            no_borrowed = savedInstanceState.getIntArray("no_borrowed");
-            no_sold = savedInstanceState.getIntArray("no_sold");
-            image = savedInstanceState.getStringArray("Image");
-            imagebook = savedInstanceState.getStringArray("Image_Book");
-            Boolean flag = false;
-            int j = 0;
-            if (What.equals("User")) {
-                //JSON_URL = "http://192.168.48.74/test/getUsers.php";
-                for (int i = 0; i < names.length; i++) {
-                    if (username[i].equals(search)) {
-                        if (!flag) {
-                            j = i;
-                        }
-                        flag = true;
-                        Book b = new Book(bname[i], no_borrowed[i], no_sold[i], imagebook[i], bid[i] + "");
-                        //listItems.add(pj.bname[i]+" "+pj.available_for_renting[i]+" "+pj.available_for_buying[i]);
-                        listItems.add(b);
-                        //imageView.setImageResource(R.drawable.user);
-
-                    }
-                }
-                if (flag) {
-                    System.out.println("kkkkkkkkffffffffff");
-                    labels.setText("Username: \nName: \nAge: \nContact: \nProfession: \nGender: \nAddress:");
-                    viewDetails.setText(username[j] + "\n" + names[j] + "\n" + age[j] + "\n" + contact[j] + "\n" + profession[j] + "\n" + gender[j] + "\n" + addr[j]);
-                    byte[] decodedString = Base64.decode(image[j], Base64.DEFAULT);
-                    Bitmap decodeByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    imageView.setImageBitmap(decodeByte);
-                    adapter = new ItemAdapter(SearchActivity.this, R.layout.list_item, listItems,current_user,name);
-                    msg.setVisibility(View.VISIBLE);
-                    name = username[j];
-                    System.out.println("alskjdg;laskjdg;lasjdg;lksjad;gklsdjg;"+name);
-                   /* msg.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            System.out.println("asdhfoowiuefhasldgj");
-                            Intent i = new Intent(SearchActivity.this,ChatActivity.class);
-                            i.putExtra("current_user",current_user);
-                            i.putExtra("receive_user",name);
-                            startActivity(i);
-                        }
-                    });*/
-                    setListAdapter(adapter);
-                }
-            } else {
-                msg.setVisibility(View.GONE);
-                //System.out.println(Bookjson);
-                //showJSONBook(Bookjson);
-                //JSON_URL = "http://192.168.48.74/test/getUsers.php";
-                flag = false;
-                j = 0;
-                id = Integer.parseInt(search);
-                for (int i = 0; i < names.length; i++) {
-                    if (bid[i] == id) {
-
-                        if (!flag) {
-                            j = i;
-                        }
-                        User u = new User(names[i], contact[i], age[i], image[i], username[i]);
-                        bookItems.add(u);
-                        //listItems.add(pj.bname[i]+" "+pj.available_for_renting[i]+" "+pj.available_for_buying[i]);
-
-
-                        flag = true;
-
-                        //break;
-                    }
-
-                }
-               // msg.setVisibility(View.GONE);
-                if (flag) {
-                    labels.setText("Name: \nMarket Price: \nNo of times Sold: \nNo of times Borrowed:");
-                    viewDetails.setText(bname[j] + "\n" + market_price[j] + "\n" + no_sold[j] + "\n" + no_borrowed[j]);
-                    byte[] decodedString = Base64.decode(image[j], Base64.DEFAULT);
-                    Bitmap decodeByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                    imageView.setImageBitmap(decodeByte);
-
-                    bookAdapter = new BookAdapter(SearchActivity.this, R.layout.book_item, bookItems,current_user,name);
-                    setListAdapter(bookAdapter);
-                }
-            }
-
-        }
-        else {
+       {
             if (What.equals("User")) {
                 JSON_URL = Link.link+"/test/getUsers.php";
 
@@ -207,14 +91,19 @@ public class SearchActivity extends MyListActivity {
     public void onSend(View v)
     {
         System.out.println("asdhfoowiuefhasldgj");
-        Intent i = new Intent(SearchActivity.this,ChatActivity.class);
-        System.out.println(current_user);
-        System.out.println(name);
-        i.putExtra("current_user",current_user);
-        i.putExtra("receive_user",name);
-        startActivity(i);
+        if(name.equals(current_user)){
+            Toast.makeText(SearchActivity.this,"You can't chat with yourself !!",Toast.LENGTH_LONG).show();
+        }else {
+            Intent i = new Intent(SearchActivity.this, ChatActivity.class);
+            System.out.println(current_user);
+            System.out.println(name);
+            i.putExtra("current_user", current_user);
+            i.putExtra("receive_user", name);
+            System.out.println("ChatActivity "+current_user);
+            startActivity(i);
+        }
     }
-    public Boolean checkConnection()
+    public Boolean checkConnection() //checking whether the internet access is available
     {
         ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -227,7 +116,7 @@ public class SearchActivity extends MyListActivity {
 
 
 
-    private synchronized void sendRequest() {
+    private synchronized void sendRequest() { //called to feth the data from the database using volley
         if(checkConnection()) {
             pDialog = new ProgressDialog(SearchActivity.this);
             pDialog.setMessage("Loading");
@@ -242,11 +131,11 @@ public class SearchActivity extends MyListActivity {
 
                             if (What.equals("User")) {
                                 System.out.println("User satisfies");
-                                showJSON(response);
+                                showJSON(response); //Calling the function to parse the resuling JSON result corresponding to the searching query
 
                             } else if (What.equals("Book")) {
                                 System.out.println("Book satisfies");
-                                showJSONBook(response);
+                                showJSONBook(response); //Calling the function to parse the resuling JSON result corresponding to the searching query
                             }
 
                         }
@@ -260,7 +149,7 @@ public class SearchActivity extends MyListActivity {
                         }
                     });
 
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            RequestQueue requestQueue = Volley.newRequestQueue(this); //the request for the data is queued in this list
             requestQueue.add(stringRequest);
             System.out.println("Outside onResponse " + What + " " + JSON_URL + " " + index);
         }
@@ -340,67 +229,10 @@ public class SearchActivity extends MyListActivity {
             adapter=new ItemAdapter(SearchActivity.this,R.layout.list_item,listItems,current_user,name);
 
             setListAdapter(adapter);
-               /* index = i + 1;
-                What = "ListBook";
-                JSON_URL = "http://192.168.48.74/test/getRelation.php";
-                System.out.println("Calling for ListBook");
-                sendRequest();*/
-           /* What="Image";
-            JSON_URL = "http://192.168.48.74/test/getImage.php";
-            System.out.println("Calling for ListBook");
-            sendRequest();*/
+
 
         }
     }
-
-
-
-   /* private void showJSONhasrev(String json) {
-        System.out.println("Inside showJSONhas"+json);
-        ParseJSONhasrev pj = new ParseJSONhasrev(json);
-        pj.parseJSONhasrev();
-        int j=-1;
-        ArrayList<Integer> list=new ArrayList<Integer>();
-        for(int i=0;i<pj.uname.length;i++){
-
-            if(pj.bname[i].equals(search)){
-                j=i;
-                if(!list.contains(pj.uid[i])){
-                    list.add(pj.uid[i]);
-                    User u=new User(pj.uname[i],pj.contact[i],pj.age[i]);
-                    bookItems.add(u);
-                }
-            }
-
-            //System.out.println("Hello "+pj.id[i]+" "+index);
-            /*if(pj.uid[i]==index){
-               // Book b=new Book(pj.bname[i],pj.available_for_buying[i],pj.available_for_renting[i]);
-                User u=new User(pj.uname[i],pj.contact[i],pj.age[i]);
-                //listItems.add(pj.bname[i]+" "+pj.available_for_renting[i]+" "+pj.available_for_buying[i]);
-                bookItems.add(u);
-                //System.out.println(pj.bid[i]);
-            }*/
-        /*}
-        if(j>=0){
-            labels.setText("Name: \nMarket Price: \nNo of times Sold: \nNo of times Borrowed:");
-            viewDetails.setText(pj.bname[j] + "\n" + pj.price[j] + "\n" + pj.sold[j] + "\n" + pj.borrowed[j]);
-        }
-        imageView.setImageResource(R.drawable.book);
-        bookAdapter=new BookAdapter(MainActivity.this,R.layout.book_item,bookItems);
-        setListAdapter(bookAdapter);
-    }*/
-
-
-   /*private void putBooks(String json){
-
-        Bookjson=json;
-        System.out.println("Inside putBooks"+json);
-        ParseJSONBook pj = new ParseJSONBook(json);
-        pj.parseJSONBook();
-        for(int i=0;i<listItems.size();i++){
-            listItems.set(Integer.parseInt(listItems.get(i)),pj.bnames[Integer.parseInt(listItems.get(i))]);
-        }
-    }*/
 
     private void showJSONBook(String json) {
 
@@ -479,29 +311,4 @@ public class SearchActivity extends MyListActivity {
         }
     }
 
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState)
-    {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putStringArray("Username",username);
-        savedInstanceState.putStringArray("password",pass);
-        savedInstanceState.putStringArray("name",names);
-        savedInstanceState.putStringArray("address",addr);
-        savedInstanceState.putStringArray("age",age);
-        savedInstanceState.putStringArray("gender",gender);
-        savedInstanceState.putStringArray("profession",profession);
-        savedInstanceState.putStringArray("contact",contact);
-        savedInstanceState.putStringArray("longitude",longitude);
-        savedInstanceState.putStringArray("latitude",latitude);
-        savedInstanceState.putIntArray("bid",bid);
-        savedInstanceState.putStringArray("bname",bname);
-        savedInstanceState.putStringArray("author",author);
-        savedInstanceState.putIntArray("market_price",market_price);
-        savedInstanceState.putIntArray("no_borrowed",no_borrowed);
-        savedInstanceState.putIntArray("no_sold",no_sold);
-        savedInstanceState.putStringArray("Image",image);
-        savedInstanceState.putStringArray("Image_Book",imagebook);
-        savedInstanceState.putInt("size",size);
-    }
 }

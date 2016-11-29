@@ -35,14 +35,14 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:id="@+id/Buy"
-                android:text="Buy"
+                android:text="@string/buy"
                 />
 
             <Button
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:id="@+id/Rent"
-                android:text="Rent"/>
+                android:text="@string/arent"/>
 
         </LinearLayout>
 

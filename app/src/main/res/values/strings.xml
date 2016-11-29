@@ -8,4 +8,23 @@
     <string name="sell">Do you want to sell this book?</string>
     <string name="rent">Do you want to rent this book?</string>
     <string name="add">Add Book</string>
+    <string name="logout">Logout</string>
+    <string name="modify_book">Modify Amounts</string>
+    <string name="buy">Buy</string>
+    <string name="arent">Rent</string>
+    <string name="Network">Please check network connection</string>
+    <string name="bookname">Please enter book name</string>
+    <string name="authorname">Please enter author name</string>
+    <string name="marketprice">Please enter market price</string>
+    <string name="pass">Password</string>
+    <string name="name">Name</string>
+    <string name="repass">Re enter password</string>
+    <string name="age">Age</string>
+    <string name="address">Address</string>
+    <string name="username">Username</string>
+    <string name="proceed">Proceed</string>
+    <string name="signin">Sign In</string>
+    <string name="signup">Not a Registered User. Please Sign Up.</string>
+    <string name="or">OR</string>
+    <string name="insert">Insert Book</string>
 </resources>

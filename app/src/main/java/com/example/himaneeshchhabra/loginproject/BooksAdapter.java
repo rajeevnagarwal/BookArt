@@ -25,8 +25,8 @@ import java.util.List;
 
 public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder> {
     private Context mContext;
-    private List<Books> albumList;
-    private String user;
+    private List<Books> albumList; //list of books
+    private String user; //current username
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         public TextView title;
@@ -71,13 +71,14 @@ public class BooksAdapter extends RecyclerView.Adapter<BooksAdapter.MyViewHolder
         }
         holder.thumbnail.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
-            {
+            { //handling onclick of View
                 Intent i = new Intent(mContext,SearchActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("Search",album.getId());
                 i.putExtra("What","Book");
                 System.out.println("Hello "+user);
                 i.putExtra("current_user",user);
+                System.out.println("SearchActivity "+user);
                 mContext.startActivity(i);
             }
 

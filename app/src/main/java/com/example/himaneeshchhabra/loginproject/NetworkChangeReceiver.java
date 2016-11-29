@@ -27,9 +27,6 @@ public class NetworkChangeReceiver extends BroadcastReceiver{
             // i need to update activity ?????
             Activity currentActivity = ((Fire)context.getApplicationContext()).getmCurrentActivity();
             System.out.println("helooasldkjfpasdg");
-            /*Intent i = new Intent(context,currentActivity.getClass());
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);*/
             Intent i = new Intent(context,currentActivity.getClass());
             if(currentActivity.getClass().getSimpleName().equals("MainActivity"))
             {

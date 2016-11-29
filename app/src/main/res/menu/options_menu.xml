@@ -11,16 +11,16 @@
     <item
         android:id="@+id/add_book"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="Add book"
+        android:title="@string/add"
         app:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/logout"
         android:icon="@android:drawable/btn_dialog"
-        android:title="Logout"
+        android:title="@string/logout"
         app:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/profile"
         android:icon="@android:drawable/btn_star"
-        android:title="Profile"
+        android:title="@string/modify_book"
         app:showAsAction="ifRoom|withText"/>
 </menu>

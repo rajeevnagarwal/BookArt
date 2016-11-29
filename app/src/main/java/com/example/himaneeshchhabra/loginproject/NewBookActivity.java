@@ -191,6 +191,7 @@ public class NewBookActivity extends MyBaseActivity {
             }
             Intent i = new Intent(getApplicationContext(),HomeActivity.class);
             i.putExtra("user_name",current_user);
+            System.out.println("HomeActivity "+current_user);
             startActivity(i);
         }
     }

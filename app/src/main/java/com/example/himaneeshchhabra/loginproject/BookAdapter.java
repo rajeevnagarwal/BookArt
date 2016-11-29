@@ -20,6 +20,7 @@ import com.example.himaneeshchhabra.loginproject.*;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 
 /**
@@ -66,12 +67,17 @@ public class BookAdapter extends ArrayAdapter<User> {
                 user.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent=new Intent(context,SearchActivity.class);
-                        intent.putExtra("Search", b.getUsername());
-                        intent.putExtra("What","User");
-                        intent.putExtra("current_user",current_user);
-                        intent.putExtra("receive_user",receive_user);
-                        context.startActivity(intent);
+
+                        {
+                            Intent intent=new Intent(context,SearchActivity.class);
+                            intent.putExtra("Search", b.getUsername());
+                            intent.putExtra("What","User");
+                            intent.putExtra("current_user",current_user);
+                            intent.putExtra("receive_user",receive_user);
+                            System.out.println("SearchActivity "+current_user);
+                            context.startActivity(intent);
+                        }
+
                     }
                 });
 

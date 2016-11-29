@@ -1,10 +1,12 @@
 package com.example.himaneeshchhabra.loginproject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -43,14 +45,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,9 +80,14 @@ public class HomeActivity extends MyBaseActivity {
         handleIntent(getIntent());
         setContentView(R.layout.activity_home);
         user = getIntent().getStringExtra("user_name");
+        if(user==null)
+        {
+            user = MainActivity.pref.getString("current_user","");
+        }
         System.out.println("Hello "+user);
         final String[] from = new String[] {"username","image"};
         final int[] to = new int[] {R.id.text,R.id.image};
+        /* simple cursor adapter for suggestion views*/
         myAdapter = new SimpleCursorAdapter(HomeActivity.this, R.layout.suggestion, null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         myAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder(){
             public boolean setViewValue(View view, Cursor cursor, int columnIndex){
@@ -94,6 +105,7 @@ public class HomeActivity extends MyBaseActivity {
 
         albumList = new ArrayList<>();
         adapter = new BooksAdapter(this, albumList,user);
+        /* Setting layout properties of recyclerview*/
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -101,14 +113,8 @@ public class HomeActivity extends MyBaseActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         prepareBooks();
-        if(checkConnection()) {
+        if(checkConnection()) { //check network connection before fetching data
             new AsyncFetch().execute();
-            /*if(strArrData==null)
-            {
-                Toast.makeText(getApplicationContext(),"Could not fetch data",Toast.LENGTH_LONG).show();
-                Intent i = new Intent(this,HomeActivity.class);
-                startActivity(i);
-            }*/
         }
         else
         {
@@ -116,9 +122,9 @@ public class HomeActivity extends MyBaseActivity {
         }
 
     }
-    public void onBackPressed()
+    public void onBackPressed()// disabling back pressed functioning
     {}
-    public Boolean checkConnection()
+    public Boolean checkConnection()//Network connection manager
     {
         ConnectivityManager connMgr = (ConnectivityManager)getSystemService(getApplicationContext().CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -131,20 +137,14 @@ public class HomeActivity extends MyBaseActivity {
     private void prepareBooks()
     {
         if(checkConnection()) {
-            new fetch_popular().execute();
-            /*if(albumList.isEmpty())
-            {
-                Toast.makeText(getApplicationContext(),"Could not fetch data",Toast.LENGTH_LONG).show();
-                Intent i = new Intent(this,HomeActivity.class);
-                startActivity(i);
-            }*/
+            new fetch_popular().execute(); // Fetching database of books
         }
         else
         {
             Toast.makeText(getApplicationContext(),"Connect to network first",Toast.LENGTH_SHORT).show();
         }
     }
-    private void handleIntent(Intent intent)
+    private void handleIntent(Intent intent) // handling search queries
     {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -167,6 +167,7 @@ public class HomeActivity extends MyBaseActivity {
             }
             in.putExtra("current_user",user);
             System.out.println("kasjd "+user);
+            System.out.println("SearchActivity "+user);
             startActivity(in);
         }
     }
@@ -272,7 +273,7 @@ public class HomeActivity extends MyBaseActivity {
         return true;
 
     }
-    private byte[] tobyte(ImageView view)
+    private byte[] tobyte(ImageView view) // converting imageview to byte
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         ((BitmapDrawable)view.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -287,32 +288,39 @@ public class HomeActivity extends MyBaseActivity {
         switch(item.getItemId())
         {
             case R.id.add_book:
-                Intent intent1=new Intent(getApplicationContext(),BookScanActivity.class);
+                Intent intent1=new Intent(getApplicationContext(),BookScanActivity.class); //for adding books
                 intent1.putExtra("current_user",user);
+                System.out.println("BookScanActivity "+user);
                 startActivity(intent1);
                 break;
             case R.id.logout:
-                Intent intent2 = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent2 = new Intent(getApplicationContext(),MainActivity.class); //for logout
+                System.out.println("MainActivity "+user);
                 startActivity(intent2);
                 break;
             case R.id.profile:
-                Dialog payDialog=new Dialog(this);
-                payDialog.setContentView(R.layout.activity_profile);
-                Button addBalance=(Button)findViewById(R.id.Add);
-                final EditText balance=(EditText)findViewById(R.id.Add_bal);
-                payDialog.setCancelable(true);
-                addBalance.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(balance.getText().equals("")){
-                            Toast.makeText(getApplicationContext(),"Please Enter the Amount !!",Toast.LENGTH_LONG).show();
-                        }
-                        else{
+                final EditText amt = new EditText(this); //for modifying balance
+                new AlertDialog.Builder(this)
+                        .setTitle("Modify your balance")
+                        .setMessage("Enter the new amount")
+                        .setView(amt)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                System.out.println(amt.getText().toString());
+                                // continue with delete
+                                if(checkConnection()) {
+                                    new Modify().execute(amt.getText().toString());
+                                }
 
-                        }
-                    }
-                });
-                payDialog.show();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(R.mipmap.ic_launcher)
+                        .show();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -446,6 +454,71 @@ public class HomeActivity extends MyBaseActivity {
                 }
 
             }
+
+        }
+
+    }
+    private class Modify extends AsyncTask<String,String,String>{
+        HttpURLConnection conn;
+        java.net.URL URL = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //this method will be running on UI thread
+
+
+        }
+
+        protected String doInBackground(String... params) {
+            String result = "";
+            String current = user;
+            String amt = params[0];
+            System.out.println(current);
+            System.out.println(amt);
+            String url = Link.link + "/test/modify.php";
+            try {
+                URL = new URL(url);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) URL.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                String post_data = URLEncoder.encode("amt", "UTF-8") + "=" + URLEncoder.encode(amt, "UTF-8")+"&"+URLEncoder.encode("current_user", "UTF-8") + "=" + URLEncoder.encode(current, "UTF-8");
+                bufferedWriter.write(post_data);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                outputStream.close();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                result = "";
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null) {
+                    result = result + line;
+                }
+                bufferedReader.close();
+                inputStream.close();
+                httpURLConnection.disconnect();
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+
+        }
+        @Override
+        protected void onPostExecute(String result) {
+            if(result.equals("done"))
+                Toast.makeText(getApplicationContext(),"done",Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(getApplicationContext(),"error",Toast.LENGTH_LONG).show();
+            System.out.println(result);
+
 
         }
 

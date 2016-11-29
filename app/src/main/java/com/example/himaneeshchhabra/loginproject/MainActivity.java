@@ -1,6 +1,7 @@
 package com.example.himaneeshchhabra.loginproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -20,6 +21,7 @@ import java.net.URL;
 
 public class MainActivity extends MyBaseActivity
 {
+    public static SharedPreferences pref;
     Button button1,button2;
     EditText editText1,editText2;
     @Override
@@ -31,6 +33,12 @@ public class MainActivity extends MyBaseActivity
         button2=(Button)findViewById(R.id.button2);
         editText1=(EditText)findViewById(R.id.editText1);
         editText2=(EditText)findViewById(R.id.editText2);
+        pref = getSharedPreferences("app",MODE_PRIVATE);
+        if(pref.getString("current_user","").length()>0) {
+
+            System.out.println("Hello"+pref.getString("current_user",""));
+            editText1.setText(pref.getString("current_user",""));
+        }
         button1.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)

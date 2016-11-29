@@ -121,7 +121,7 @@
         android:layout_above="@+id/editText10"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/textView10" />
+        android:layout_toRightOf="@+id/textView10" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
         android:layout_toEndOf="@+id/textView10" />
 
     <TextView
-        android:text="Username"
+        android:text="@string/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView6"
@@ -175,7 +175,7 @@
         android:layout_alignStart="@+id/editText7" />
 
     <TextView
-        android:text="Password"
+        android:text="@string/pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView4"
@@ -183,7 +183,7 @@
         android:textStyle="normal|bold|italic"
         android:layout_marginBottom="11dp"
         android:layout_above="@+id/textView5"
-        android:layout_toEndOf="@+id/textView15"
+        android:layout_toRightOf="@+id/textView15"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -201,7 +201,7 @@
         android:layout_alignStart="@+id/editText4" />
 
     <TextView
-        android:text="Name"
+        android:text="@string/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView14"
@@ -215,7 +215,7 @@
         android:layout_alignEnd="@+id/textView5" />
 
     <TextView
-        android:text="Re-Enter Password"
+        android:text="@string/repass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView5"
@@ -253,7 +253,7 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="Age"
+        android:text="@string/age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText18"
@@ -266,7 +266,7 @@
         android:layout_alignEnd="@+id/textView15" />
 
     <TextView
-        android:text="Address"
+        android:text="@string/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView15"
